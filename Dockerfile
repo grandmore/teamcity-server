@@ -2,7 +2,6 @@
 # Based on Debian.
 
 # sudo docker run -dt --name teamcity_server -p 8111:8111 stuartfenton/teamcity-server
-
 FROM stuartfenton/base
 MAINTAINER Stuart Fenton "stuart@overlima.com"
 
@@ -12,15 +11,13 @@ VOLUME ["/home-teamcity"]
 
 ENV TEAMCITY_DATA_PATH /home-teamcity
 
+#install needed library for add-apt-repository to work
+RUN eatmydata -- apt-get install -yq software-properties-common python-software-properties python3-software-properties && add-apt-repository ppa:webupd8team/java -y && apt-get update
 
-RUN	apt-get update && \
-        apt-get install -y wget default-jre && \
-        rm -rf /var/lib/apt/lists/*
-
-RUN wget -qO- http://download.jetbrains.com/teamcity/TeamCity-$TC_VERSION.tar.gz | tar xz -C /opt
-
-
-# VCS tools
+# Install Oracle Java 7
+RUN eatmydata -- apt-get install -yq software-properties-common && add-apt-repository ppa:webupd8team/java -y && apt-get update
+RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN eatmydata -- apt-get install -yq oracle-java7-installer
 
 # install zip
 RUN eatmydata -- apt-get install -yq zip
@@ -59,6 +56,11 @@ RUN wget http://mercurial.selenic.com/release/mercurial-3.2.4.tar.gz
 RUN cd /; tar -zxf mercurial-3.2.4.tar.gz
 RUN cd mercurial-3.2.4; make build PYTHON=python; make install;
 
+RUN	apt-get update && \
+        apt-get install -y wget default-jre && \
+        rm -rf /var/lib/apt/lists/*
+
+RUN wget -qO- http://download.jetbrains.com/teamcity/TeamCity-$TC_VERSION.tar.gz | tar xz -C /opt
 
 
 EXPOSE 8111
