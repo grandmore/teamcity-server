@@ -2,6 +2,8 @@
 # Based on Debian.
 
 # sudo docker run -dt --name teamcity_server -p 8111:8111 stuartfenton/teamcity-server
+# sudo docker run -v /home-teamcity:/home-teamcity -p 8111:8111 --name="teamcity-server" --restart=always -d stuartfenton/teamcity-server 
+
 FROM stuartfenton/base
 MAINTAINER Stuart Fenton "stuart@overlima.com"
 
