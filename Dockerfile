@@ -21,6 +21,16 @@ RUN eatmydata -- apt-get install -yq software-properties-common && add-apt-repos
 RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN eatmydata -- apt-get install -yq oracle-java7-installer
 
+
+# This will use the 1.3.2 release
+#RUN wget -O /usr/local/bin/docker https://get.docker.io/builds/Linux/x86_64/docker-1.3.2
+# This will use the 1.4.1 release
+RUN wget -O /usr/local/bin/docker https://get.docker.io/builds/Linux/x86_64/docker-1.4.1
+RUN chmod +x /usr/local/bin/docker
+ADD 10_wrapdocker.sh /etc/my_init.d/10_wrapdocker.sh
+RUN groupadd docker
+
+
 # install zip
 RUN eatmydata -- apt-get install -yq zip
 
